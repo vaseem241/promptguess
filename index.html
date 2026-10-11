@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PromptGuess: Real or AI? — The Daily Visual Turing Test</title>
-  <meta name="description" content="Can you spot the AI image? Play the daily 5-round visual test and test your human intuition.">
+  <title>PromptGuess: Real vs AI? — Spot the Synthetic Image</title>
+  <meta name="description" content="Test your intuition against modern diffusion models. Can you spot which image is real photography and which is AI?">
   
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,38 +14,32 @@
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#f0fdf4',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-            },
             cyber: {
               cyan: '#06b6d4',
               pink: '#ec4899',
-              dark: '#0b0f19',
-              card: '#131b2e',
-              border: '#1f2d47'
+              dark: '#080c16',
+              card: '#0f172a',
+              border: '#1e293b'
             }
           },
           animation: {
-            'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'pop': 'pop 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
             'shake': 'shake 0.4s ease-in-out',
-            'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+            'shimmer': 'shimmer 1.8s infinite'
           },
           keyframes: {
-            pulseGlow: {
-              '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
-              '50%': { opacity: '1', transform: 'scale(1.02)' }
+            pop: {
+              '0%': { transform: 'scale(0.94)', opacity: '0.4' },
+              '100%': { transform: 'scale(1)', opacity: '1' }
             },
             shake: {
               '0%, 100%': { transform: 'translateX(0)' },
-              '20%, 60%': { transform: 'translateX(-6px)' },
-              '40%, 80%': { transform: 'translateX(6px)' }
+              '25%, 75%': { transform: 'translateX(-6px)' },
+              '50%': { transform: 'translateX(6px)' }
             },
-            pop: {
-              '0%': { transform: 'scale(0.92)', opacity: '0.5' },
-              '100%': { transform: 'scale(1)', opacity: '1' }
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' }
             }
           }
         }
@@ -59,7 +53,7 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #070a12;
+      background-color: #070a13;
       color: #f1f5f9;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
@@ -68,33 +62,24 @@
       font-family: 'JetBrains Mono', monospace;
     }
     .glass-card {
-      background: rgba(19, 27, 46, 0.82);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .glow-cyan {
-      box-shadow: 0 0 25px -4px rgba(6, 182, 212, 0.35);
-    }
-    .glow-pink {
-      box-shadow: 0 0 25px -4px rgba(236, 72, 153, 0.35);
-    }
-    /* Hide scrollbars but keep scrolling */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .img-loading {
+      background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-cyan-500 selection:text-black">
 
   <!-- Header / Navigation Bar -->
-  <header class="w-full max-w-4xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between border-b border-cyber-border/60">
+  <header class="w-full max-w-4xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between border-b border-cyber-border/70">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-pink-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-pink-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
         <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 01-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
         </svg>
@@ -110,11 +95,17 @@
 
     <!-- Quick stats & Sound controls -->
     <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Unseen Pairs Remaining Counter -->
+      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyber-card border border-cyber-border text-xs font-semibold text-slate-300">
+        <span class="text-cyan-400">⚡</span>
+        <span id="deckCounter" class="mono text-cyan-300 font-bold">--</span>
+        <span class="text-[10px] text-slate-400 hidden sm:inline">fresh pairs</span>
+      </div>
+
       <!-- Streak display -->
-      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyber-card border border-cyber-border text-xs font-semibold text-amber-400 shadow-inner">
+      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyber-card border border-cyber-border text-xs font-semibold text-amber-400">
         <span>🔥</span>
         <span id="streakCounter" class="mono text-white">0</span>
-        <span class="text-[10px] text-slate-400 font-normal hidden sm:inline">streak</span>
       </div>
 
       <!-- Sound Toggle -->
@@ -137,44 +128,29 @@
     </div>
   </header>
 
-  <!-- Top Non-Intrusive Monetization / Sponsor Slot -->
-  <div class="w-full max-w-4xl mx-auto px-4 mt-2">
-    <div class="glass-card rounded-xl px-4 py-2 flex items-center justify-between text-xs text-slate-400 border border-cyber-border/40 hover:border-cyan-500/30 transition-all cursor-pointer group" onclick="openSponsorLink()">
-      <div class="flex items-center gap-2">
-        <span class="px-1.5 py-0.5 rounded bg-slate-800 text-[9px] uppercase tracking-wider font-semibold text-slate-400">Sponsored</span>
-        <span class="text-slate-300 group-hover:text-cyan-300 transition-colors">⚡ Build AI apps with instant vector search on Cloudflare</span>
-      </div>
-      <span class="text-slate-500 group-hover:text-slate-300 font-mono text-[11px] flex items-center gap-1">
-        Try Free &rarr;
-      </span>
-    </div>
-  </div>
-
   <!-- Main Active Game Container -->
   <main class="w-full max-w-4xl mx-auto px-4 py-4 flex-1 flex flex-col justify-center">
 
     <!-- GAMEPLAY VIEW -->
     <div id="gamePlaySection" class="w-full flex flex-col gap-4">
       
-      <!-- Round & Progress Dots -->
+      <!-- Round Info & Progress Indicator -->
       <div class="flex items-center justify-between">
-        <div>
+        <div class="flex items-center gap-2">
           <span class="text-xs uppercase tracking-wider text-slate-400 font-bold">Round <span id="currentRoundNum" class="text-white mono text-sm">1</span> of 5</span>
-          <span id="dailyDateTitle" class="ml-2 text-xs text-cyan-400 mono hidden sm:inline">#Day-284</span>
+          <span id="topicTag" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-medium">Topic</span>
         </div>
 
         <!-- 5-Pip Progress Indicator -->
-        <div class="flex items-center gap-1.5" id="roundPipsContainer">
-          <!-- Dynamically populated 5 circle pips -->
-        </div>
+        <div class="flex items-center gap-1.5" id="roundPipsContainer"></div>
       </div>
 
-      <!-- Primary Question Prompt -->
+      <!-- Question Title -->
       <div class="text-center py-1">
         <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center justify-center gap-2">
-          <span>Which image was generated by <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">AI</span>?</span>
+          <span>Which image was generated by <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-rose-300 to-purple-400">AI</span>?</span>
         </h1>
-        <p class="text-xs sm:text-sm text-slate-400 mt-1">Inspect textures, fingers, lighting, and fine background reflections.</p>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">Study lighting reflections, hands, text signage, and subtle micro-textures.</p>
       </div>
 
       <!-- Image Duel Cards -->
@@ -182,16 +158,16 @@
         
         <!-- CARD A -->
         <div id="cardA" onclick="handleChoice('A')" class="glass-card group relative rounded-2xl overflow-hidden cursor-pointer border border-cyber-border hover:border-cyan-400/80 transition-all duration-300 transform hover:-translate-y-1 shadow-lg">
-          <div class="relative w-full h-64 sm:h-80 bg-slate-900 overflow-hidden flex items-center justify-center">
-            <img id="imgA" src="" alt="Option A" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="eager" />
+          <div class="relative w-full h-64 sm:h-80 bg-slate-900 overflow-hidden flex items-center justify-center img-loading" id="loaderA">
+            <img id="imgA" src="" alt="Option A" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-0 transition-opacity duration-300" onload="imageLoaded('A')" />
             
             <!-- Letter Pill -->
-            <div class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md border border-white/20 text-white font-extrabold text-sm mono flex items-center gap-1.5 shadow-md">
+            <div class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md border border-white/20 text-white font-extrabold text-sm mono flex items-center gap-1.5 shadow-md z-10">
               <span class="text-cyan-400">#A</span>
             </div>
 
             <!-- Reveal Overlay on Choice -->
-            <div id="overlayA" class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transition-opacity duration-300">
+            <div id="overlayA" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transition-opacity duration-300 z-20">
               <div id="badgeA" class="px-4 py-1.5 rounded-full font-bold text-xs uppercase tracking-widest mb-3"></div>
               <p id="tellA" class="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium"></p>
             </div>
@@ -201,22 +177,22 @@
             <span class="text-xs font-semibold text-slate-300 group-hover:text-cyan-300 flex items-center gap-1.5 transition-colors">
               <span>Select Image A</span> &rarr;
             </span>
-            <span class="text-[11px] mono text-slate-500">Tap to inspect</span>
+            <span class="text-[11px] mono text-slate-500">Click to choose</span>
           </div>
         </div>
 
         <!-- CARD B -->
         <div id="cardB" onclick="handleChoice('B')" class="glass-card group relative rounded-2xl overflow-hidden cursor-pointer border border-cyber-border hover:border-pink-400/80 transition-all duration-300 transform hover:-translate-y-1 shadow-lg">
-          <div class="relative w-full h-64 sm:h-80 bg-slate-900 overflow-hidden flex items-center justify-center">
-            <img id="imgB" src="" alt="Option B" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="eager" />
+          <div class="relative w-full h-64 sm:h-80 bg-slate-900 overflow-hidden flex items-center justify-center img-loading" id="loaderB">
+            <img id="imgB" src="" alt="Option B" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-0 transition-opacity duration-300" onload="imageLoaded('B')" />
             
             <!-- Letter Pill -->
-            <div class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md border border-white/20 text-white font-extrabold text-sm mono flex items-center gap-1.5 shadow-md">
+            <div class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md border border-white/20 text-white font-extrabold text-sm mono flex items-center gap-1.5 shadow-md z-10">
               <span class="text-pink-400">#B</span>
             </div>
 
             <!-- Reveal Overlay on Choice -->
-            <div id="overlayB" class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transition-opacity duration-300">
+            <div id="overlayB" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transition-opacity duration-300 z-20">
               <div id="badgeB" class="px-4 py-1.5 rounded-full font-bold text-xs uppercase tracking-widest mb-3"></div>
               <p id="tellB" class="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium"></p>
             </div>
@@ -226,7 +202,7 @@
             <span class="text-xs font-semibold text-slate-300 group-hover:text-pink-300 flex items-center gap-1.5 transition-colors">
               <span>Select Image B</span> &rarr;
             </span>
-            <span class="text-[11px] mono text-slate-500">Tap to inspect</span>
+            <span class="text-[11px] mono text-slate-500">Click to choose</span>
           </div>
         </div>
 
@@ -255,7 +231,6 @@
     <div id="resultSection" class="hidden w-full max-w-xl mx-auto flex-col gap-6 text-center animate-pop">
       
       <div class="glass-card rounded-3xl p-6 sm:p-8 border border-cyber-border/80 relative overflow-hidden shadow-2xl">
-        <!-- Background decorative ambient glow -->
         <div class="absolute -top-24 -left-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -272,9 +247,7 @@
         </p>
 
         <!-- Visual Score Squares -->
-        <div id="resultSquareRow" class="flex items-center justify-center gap-2 mb-6">
-          <!-- Filled dynamically: 🟩🟩🟥🟩🟩 -->
-        </div>
+        <div id="resultSquareRow" class="flex items-center justify-center gap-2 mb-6"></div>
 
         <!-- Share and Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-3 justify-center mb-6">
@@ -285,16 +258,16 @@
             <span id="shareBtnText">Share Result</span>
           </button>
 
-          <button onclick="switchToEndlessMode()" class="py-3 px-5 rounded-xl glass-card border border-cyber-border hover:border-slate-500 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">
-            <span>Play Practice Mode</span>
-            <span>&infin;</span>
+          <button onclick="startFreshBatch()" class="py-3 px-5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition-all shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2">
+            <span>Play Fresh 5 New Pictures</span>
+            <span>&rarr;</span>
           </button>
         </div>
 
         <!-- Next daily countdown & stats preview -->
         <div class="pt-6 border-t border-cyber-border/60 flex flex-col sm:flex-row items-center justify-around gap-4 text-left">
           <div>
-            <div class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Next Daily Test In</div>
+            <div class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Next Daily Drop In</div>
             <div id="midnightCountdown" class="mono text-lg font-bold text-cyan-400 mt-0.5">00:00:00</div>
           </div>
           <div class="flex items-center gap-4 text-center">
@@ -315,27 +288,11 @@
 
       </div>
 
-      <!-- Monetization Sponsor / Tools Recommendation Slot -->
-      <div class="glass-card rounded-2xl p-4 text-left flex items-center justify-between border-dashed border-slate-700">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-300">
-            🎨
-          </div>
-          <div>
-            <h5 class="text-xs font-bold text-white">Want to generate photorealistic images like these?</h5>
-            <p class="text-[11px] text-slate-400">Try Midjourney, Stable Diffusion & Flux with automated prompts.</p>
-          </div>
-        </div>
-        <a href="https://google.com" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-xs font-semibold whitespace-nowrap transition-colors">
-          Explore Prompts &rarr;
-        </a>
-      </div>
-
     </div>
 
   </main>
 
-  <!-- Stats Overlay Modal -->
+  <!-- Stats Modal -->
   <div id="statsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="glass-card w-full max-w-md rounded-2xl p-6 border border-cyber-border shadow-2xl animate-pop relative">
       <button onclick="toggleStatsModal(false)" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
@@ -368,8 +325,8 @@
       </div>
 
       <div class="p-3 rounded-xl bg-slate-900/40 border border-cyber-border text-xs text-slate-300 mb-4">
-        <p class="font-semibold text-white mb-1">🤖 How PromptGuess works:</p>
-        <p>Every day at 00:00 UTC, a fresh batch of 5 side-by-side challenges drops. One image is a genuine photograph; the other is generated using advanced AI diffusion models.</p>
+        <p class="font-semibold text-white mb-1">🔁 Anti-Repeat Guarantee:</p>
+        <p>Every round you play draws an unseen pair from our dynamic deck. Once you exhaust all pairs, the deck seamlessly reshuffles so you're always testing fresh visual challenges.</p>
       </div>
 
       <button onclick="toggleStatsModal(false)" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm transition-colors">
@@ -390,14 +347,14 @@
       <span>PromptGuess &copy; 2026 &bull; Daily Visual AI Benchmark</span>
     </div>
     <div class="flex items-center gap-4 text-slate-400">
-      <button onclick="toggleStatsModal(true)" class="hover:text-cyan-400 transition-colors">Stats</button>
-      <button onclick="resetDayDataForTesting()" class="hover:text-pink-400 transition-colors text-[11px] opacity-60">Reset Daily (Dev Test)</button>
+      <button onclick="toggleStatsModal(true)" class="hover:text-cyan-400 transition-colors">Career Stats</button>
+      <button onclick="resetSeenImagesHistory()" class="hover:text-pink-400 transition-colors text-[11px] opacity-70">Clear Seen History</button>
     </div>
   </footer>
 
   <script>
     /* =========================================================================
-       1. SYNTH AUDIO ENGINE (Web Audio API - No external sound files required)
+       1. SYNTH AUDIO ENGINE (100% Native Web Audio API - Zero External Files)
        ========================================================================= */
     class SoundEngine {
       constructor() {
@@ -430,8 +387,8 @@
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 0.05);
+        osc.frequency.setValueAtTime(550, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(140, this.ctx.currentTime + 0.05);
 
         gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
@@ -447,24 +404,23 @@
         this.init();
         if (!this.ctx) return;
 
-        // Upward pleasant major chord arpeggio
         const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
         notes.forEach((freq, idx) => {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
-          const startTime = this.ctx.currentTime + (idx * 0.06);
+          const startTime = this.ctx.currentTime + (idx * 0.055);
 
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, startTime);
 
           gain.gain.setValueAtTime(0.0, startTime);
-          gain.gain.linearRampToValueAtTime(0.18, startTime + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.35);
+          gain.gain.linearRampToValueAtTime(0.15, startTime + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.32);
 
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start(startTime);
-          osc.stop(startTime + 0.36);
+          osc.stop(startTime + 0.33);
         });
       }
 
@@ -473,294 +429,296 @@
         this.init();
         if (!this.ctx) return;
 
-        // Low buzz tone
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(140, this.ctx.currentTime);
-        osc.frequency.linearRampToValueAtTime(90, this.ctx.currentTime + 0.28);
+        osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(80, this.ctx.currentTime + 0.28);
 
-        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.28);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start();
-        osc.stop(this.ctx.currentTime + 0.3);
+        osc.stop(this.ctx.currentTime + 0.29);
       }
     }
 
     const audio = new SoundEngine();
 
     /* =========================================================================
-       2. CURATED DATASET (High resolution Pairs: Real Photography vs AI Art)
+       2. EXTENSIVE CURATED CHALLENGE DATABASE
+       Each challenge has a unique ID, authentic cues, and AI generator telltales
        ========================================================================= */
     const CHALLENGE_DATABASE = [
       {
-        id: "cat_portrait",
+        id: "cat_macro",
         topic: "Feline Macro Portrait",
         real: {
-          url: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80",
-          tell: "Real photograph. Natural irregular whiskers, genuine organic eye moisture and fur dust particles."
+          url: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=900&q=80",
+          tell: "Genuine photo: Authentic irregular whiskers, organic eye moisture, and individual fur root depth."
         },
         ai: {
-          url: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=800&q=80",
-          tell: "AI Synthesized. Notice the hyper-smoothed fur shading and symmetrical iris reflections characteristic of Midjourney v6."
+          url: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Symmetrical iris specular reflections and hyper-smoothed micro-fur shading."
         }
       },
       {
-        id: "cyber_city",
-        topic: "Rainy Neon Street",
+        id: "cyber_rain",
+        topic: "Rainy Neon Cyber City",
         real: {
-          url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80",
-          tell: "Real photograph of Shinjuku. Authentic signage glyphs, lens rain droplets, and camera chromatic aberration."
+          url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=900&q=80",
+          tell: "Genuine Shinjuku photography: Real storefront kanji typography, camera lens flare, and accurate road puddles."
         },
         ai: {
-          url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-          tell: "AI Generation. Neon store signs have invented pseudo-kanji characters and puddle reflections don't mirror the signs above."
+          url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Generation: Nonsensical distorted neon characters and puddle reflections that don't match the buildings."
         }
       },
       {
-        id: "elderly_portrait",
+        id: "human_expression",
         topic: "Human Expressive Portrait",
         real: {
-          url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-          tell: "Real photograph taken with an 85mm prime lens. Distinct skin pores, flyaway hairs, and realistic dental texture."
+          url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=900&q=80",
+          tell: "Real portrait: Natural pores, flyaway baby hairs, and realistic subsurface skin scattering."
         },
         ai: {
-          url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-          tell: "AI Generated. Notice the plastic-smooth skin texture blending into ear lobes and subtle pupil boundary irregularities."
+          url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Plastic-like waxy skin smoothing and subtle pupil boundary irregularities."
         }
       },
       {
-        id: "coffee_table",
-        topic: "Morning Latte & Pastry",
+        id: "artisan_coffee",
+        topic: "Morning Latte & Café",
         real: {
-          url: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
-          tell: "Real photography. Authentic micro-foam bubbles with natural coffee oil rings and authentic wood grain seams."
+          url: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=900&q=80",
+          tell: "Real photography: Real micro-foam bubbles with natural coffee oil rings and authentic wooden counter grain."
         },
         ai: {
-          url: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=800&q=80",
-          tell: "AI Synthesized. The ceramic mug rim has varying thickness and the reflection angle defies physics."
+          url: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: The ceramic mug rim has uneven thickness and steam flows in an unnatural uniform spiral."
         }
       },
       {
-        id: "mountain_landscape",
+        id: "alpine_lake",
         topic: "Alpine Lake Reflection",
         real: {
-          url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
-          tell: "Real photograph of Mount Robson. Distinct rock strata layers, geological weathering, and authentic atmospheric haze."
+          url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80",
+          tell: "Real photograph of Mount Robson: Authentic rock strata layers, geological erosion, and true mountain haze."
         },
         ai: {
-          url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-          tell: "AI Synthesized. Repetitive fractal pine trees in midground and hyper-dramatic unreal lighting gradients."
+          url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Repetitive fractal pine trees in the midground and dramatic non-physical light rays."
         }
       },
       {
-        id: "watch_macro",
-        topic: "Mechanical Watch Dial",
+        id: "mechanical_watch",
+        topic: "Luxury Chronograph Dial",
         real: {
-          url: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
-          tell: "Real photograph. Legible brand typography, crisp bevel cuts on steel, and correct gear meshing."
+          url: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80",
+          tell: "Real photo: Crisp laser-etched font typography, genuine brushed steel grain, and mechanical gear alignment."
         },
         ai: {
-          url: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=800&q=80",
-          tell: "AI Synthesized. The hour markers blur irregularly into the dial and numerical typography has nonsensical notches."
+          url: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Hour markers blur irregularly into the dial and numerical indices have melted notches."
         }
       },
       {
-        id: "futuristic_car",
-        topic: "Sports Car in Desert",
+        id: "desert_supercar",
+        topic: "Supercar in the Desert",
         real: {
-          url: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80",
-          tell: "Real shoot. Authentic brake disc heat stains, correct tire tread geometry, and real ground dust kick."
+          url: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80",
+          tell: "Real shoot: Real brake disc heat stains, correct tire tread patterns, and airborne sand particles."
         },
         ai: {
-          url: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80",
-          tell: "AI Synthesized. Rim spokes merge into tire rubber and rear-view mirrors exhibit asymmetric warping."
+          url: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Rim spokes melt irregularly into the tire rubber and mirror reflections are asymmetric."
+        }
+      },
+      {
+        id: "cozy_interior",
+        topic: "Modern Bohemian Living Room",
+        real: {
+          url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=900&q=80",
+          tell: "Real photograph: Physical plug sockets, realistic fabric stitching on pillows, and natural sunlight falloff."
+        },
+        ai: {
+          url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Pillow tassels merge seamlessly into the rug and chair legs have subtly differing lengths."
+        }
+      },
+      {
+        id: "macro_flower",
+        topic: "Morning Dew on Petals",
+        real: {
+          url: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=900&q=80",
+          tell: "Real macro photography: Authentic surface tension in dew droplets reflecting the sky, plus delicate petal veins."
+        },
+        ai: {
+          url: "https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Droplets have inconsistent gravity vectors and internal petal structures look painted."
+        }
+      },
+      {
+        id: "gourmet_burger",
+        topic: "Artisan Burger & Fries",
+        real: {
+          url: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
+          tell: "Real shoot: Realistic bun crust cracking, melted cheese grease sheen, and natural sesame seed distribution."
+        },
+        ai: {
+          url: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Sesame seeds float unnaturally above the bun surface and the patty texture looks blurred."
+        }
+      },
+      {
+        id: "wild_fox",
+        topic: "Red Fox in Winter Snow",
+        real: {
+          url: "https://images.unsplash.com/photo-1516934024742-b461fba47600?auto=format&fit=crop&w=900&q=80",
+          tell: "Real wildlife shot: Clumped icy snow on whiskers, crisp animal pupils, and realistic snowy depth-of-field."
+        },
+        ai: {
+          url: "https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Whisker strands split into forks and snow crystals display unnatural geometric symmetry."
+        }
+      },
+      {
+        id: "astronomy_nebula",
+        topic: "Deep Space Stellar Nebula",
+        real: {
+          url: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=900&q=80",
+          tell: "Hubble telescope capture: Authentic telescope diffraction spikes on foreground stars and gas ionization colors."
+        },
+        ai: {
+          url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=80",
+          tell: "AI Synthesized: Star dots are uniformly circular without sensor diffraction, and cosmic dust follows brush-like curves."
         }
       }
     ];
 
     /* =========================================================================
-       3. STATE MANAGEMENT & LOCAL STORAGE
+       3. STRICT ANTI-REPETITION DECK ENGINE
+       Guarantees every played round pulls an unseen pair from storage
        ========================================================================= */
-    const STORAGE_KEY = 'promptguess_state_v1';
-    
-    // Format today's date key (e.g. "2026-10-11")
-    function getTodayKey() {
-      const now = new Date();
-      return `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}-${String(now.getUTCDate()).padStart(2, '0')}`;
-    }
+    const STORAGE_KEY = 'promptguess_state_v2';
+    const SEEN_IDS_KEY = 'promptguess_seen_ids_v2';
 
-    // Day number since game epoch
-    function getDayNumber() {
-      const epoch = new Date('2026-01-01T00:00:00Z');
-      const now = new Date();
-      return Math.floor((now - epoch) / (1000 * 60 * 60 * 24)) + 1;
-    }
-
-    let defaultStats = {
+    let userStats = {
       gamesPlayed: 0,
       totalCorrectGuesses: 0,
       currentStreak: 0,
       maxStreak: 0,
-      history: {} // keyed by date string
+      history: {}
     };
 
-    let userStats = defaultStats;
+    let seenPairIds = new Set();
 
-    function loadStats() {
+    function loadState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          userStats = Object.assign({}, defaultStats, JSON.parse(raw));
+        const rawStats = localStorage.getItem(STORAGE_KEY);
+        if (rawStats) {
+          userStats = Object.assign({}, userStats, JSON.parse(rawStats));
         }
-      } catch (e) {
-        console.warn('Storage unavailable:', e);
+
+        const rawSeen = localStorage.getItem(SEEN_IDS_KEY);
+        if (rawSeen) {
+          const parsed = JSON.parse(rawSeen);
+          seenPairIds = new Set(parsed);
+        }
+      } catch (err) {
+        console.warn('LocalStorage unavailable:', err);
       }
+      updateDeckCounterUI();
       updateStatsUI();
     }
 
-    function saveStats() {
+    function saveState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(userStats));
-      } catch (e) {
-        console.warn('Could not save:', e);
+        localStorage.setItem(SEEN_IDS_KEY, JSON.stringify(Array.from(seenPairIds)));
+      } catch (err) {
+        console.warn('LocalStorage save failed:', err);
       }
+      updateDeckCounterUI();
       updateStatsUI();
     }
 
-    function updateStatsUI() {
-      document.getElementById('streakCounter').innerText = userStats.currentStreak;
-      document.getElementById('statGamesPlayed').innerText = userStats.gamesPlayed;
-      
-      const totalGuesses = userStats.gamesPlayed * 5;
-      const winPct = totalGuesses > 0 ? Math.round((userStats.totalCorrectGuesses / totalGuesses) * 100) : 0;
-      
-      document.getElementById('statWinPct').innerText = `${winPct}%`;
-      document.getElementById('statMaxStreak').innerText = userStats.maxStreak;
+    function updateDeckCounterUI() {
+      const remainingUnseen = CHALLENGE_DATABASE.filter(c => !seenPairIds.has(c.id)).length;
+      document.getElementById('deckCounter').innerText = remainingUnseen;
+    }
 
-      // Modal elements
-      document.getElementById('modalPlayed').innerText = userStats.gamesPlayed;
-      document.getElementById('modalAccuracy').innerText = `${winPct}%`;
-      document.getElementById('modalStreak').innerText = userStats.currentStreak;
-      document.getElementById('modalBestStreak').innerText = userStats.maxStreak;
+    function resetSeenImagesHistory() {
+      seenPairIds.clear();
+      saveState();
+      showToast('Seen images reset! All pairs are fresh again.');
+      startFreshBatch();
+    }
+
+    /* Pulls 5 STRICTLY UNIQUE pairs that have not been seen yet */
+    function getNextUniqueFivePairs() {
+      // Find pairs not yet seen
+      let unseen = CHALLENGE_DATABASE.filter(item => !seenPairIds.has(item.id));
+
+      // If less than 5 unseen remain, recycle deck but prioritize remaining unseen
+      if (unseen.length < 5) {
+        seenPairIds.clear();
+        unseen = [...CHALLENGE_DATABASE];
+      }
+
+      // Shuffle unseen array
+      for (let i = unseen.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [unseen[i], unseen[j]] = [unseen[j], unseen[i]];
+      }
+
+      // Take the top 5
+      const chosen = unseen.slice(0, 5);
+
+      // Mark these chosen IDs as seen immediately
+      chosen.forEach(item => seenPairIds.add(item.id));
+      saveState();
+
+      // Randomize whether 'A' or 'B' is AI for each challenge
+      return chosen.map(item => {
+        const isAIOnA = Math.random() > 0.5;
+        return {
+          id: item.id,
+          topic: item.topic,
+          isAIOnA: isAIOnA,
+          imgA: isAIOnA ? item.ai.url : item.real.url,
+          tellA: isAIOnA ? item.ai.tell : item.real.tell,
+          badgeA: isAIOnA ? 'AI SYNTHETIC' : 'AUTHENTIC REAL',
+          
+          imgB: isAIOnA ? item.real.url : item.ai.url,
+          tellB: isAIOnA ? item.real.tell : item.ai.tell,
+          badgeB: isAIOnA ? 'AUTHENTIC REAL' : 'AI SYNTHETIC',
+          
+          aiKey: isAIOnA ? 'A' : 'B'
+        };
+      });
     }
 
     /* =========================================================================
-       4. GAME LOGIC & DETERMINISTIC DAILY GENERATION
+       4. GAMEPLAY LOGIC & TRANSITIONS
        ========================================================================= */
+    let activeRounds = [];
     let currentRoundIndex = 0;
-    let roundChoices = []; // holds boolean for each of 5 rounds
-    let activeRounds = [];  // Array of 5 round configurations
-    let isDailyMode = true;
+    let roundChoices = [];
     let roundAnswered = false;
 
-    // Pseudo-random deterministic generator based on seed
-    function seededRandom(seed) {
-      let x = Math.sin(seed++) * 10000;
-      return x - Math.floor(x);
-    }
-
-    function getDailyRounds() {
-      const today = getTodayKey();
-      // Generate numeric hash from date
-      let hash = 0;
-      for (let i = 0; i < today.length; i++) {
-        hash = (hash << 5) - hash + today.charCodeAt(i);
-        hash |= 0;
-      }
-      const absSeed = Math.abs(hash);
-
-      // Shuffle database deterministically
-      const pool = [...CHALLENGE_DATABASE];
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(seededRandom(absSeed + i) * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-
-      // Select top 5
-      const selected = pool.slice(0, 5);
-
-      // Randomly assign whether 'A' or 'B' is AI for each round
-      return selected.map((item, idx) => {
-        const isAIOnA = seededRandom(absSeed + 10 + idx) > 0.5;
-        return {
-          topic: item.topic,
-          isAIOnA: isAIOnA,
-          imgA: isAIOnA ? item.ai.url : item.real.url,
-          tellA: isAIOnA ? item.ai.tell : item.real.tell,
-          badgeA: isAIOnA ? 'AI SYNTHETIC' : 'AUTHENTIC REAL',
-          
-          imgB: isAIOnA ? item.real.url : item.ai.url,
-          tellB: isAIOnA ? item.real.tell : item.real.tell,
-          badgeB: isAIOnA ? 'AUTHENTIC REAL' : 'AI SYNTHETIC',
-          
-          aiKey: isAIOnA ? 'A' : 'B'
-        };
-      });
-    }
-
-    function getRandomEndlessRounds() {
-      const shuffled = [...CHALLENGE_DATABASE].sort(() => 0.5 - Math.random()).slice(0, 5);
-      return shuffled.map(item => {
-        const isAIOnA = Math.random() > 0.5;
-        return {
-          topic: item.topic,
-          isAIOnA: isAIOnA,
-          imgA: isAIOnA ? item.ai.url : item.real.url,
-          tellA: isAIOnA ? item.ai.tell : item.real.tell,
-          badgeA: isAIOnA ? 'AI SYNTHETIC' : 'AUTHENTIC REAL',
-
-          imgB: isAIOnA ? item.real.url : item.ai.url,
-          tellB: isAIOnA ? item.real.tell : item.real.tell,
-          badgeB: isAIOnA ? 'AUTHENTIC REAL' : 'AI SYNTHETIC',
-
-          aiKey: isAIOnA ? 'A' : 'B'
-        };
-      });
-    }
-
-    // Initialize the Game
     function initGame() {
-      loadStats();
-      const today = getTodayKey();
-      document.getElementById('dailyDateTitle').innerText = `#Day-${getDayNumber()}`;
-
-      // Check if user already finished today's daily
-      if (userStats.history[today]) {
-        // Show result directly
-        showDailyAlreadyCompleted(userStats.history[today]);
-      } else {
-        startDailyChallenge();
-      }
-
+      loadState();
+      startFreshBatch();
       startCountdown();
     }
 
-    function startDailyChallenge() {
-      isDailyMode = true;
-      document.getElementById('modeBadge').innerText = 'DAILY';
-      document.getElementById('modeBadge').className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 tracking-wider uppercase';
-      
-      activeRounds = getDailyRounds();
+    function startFreshBatch() {
+      activeRounds = getNextUniqueFivePairs();
       currentRoundIndex = 0;
       roundChoices = [];
-      
-      showGamePlayView();
-      renderRound();
-    }
-
-    function switchToEndlessMode() {
-      isDailyMode = false;
-      document.getElementById('modeBadge').innerText = 'PRACTICE';
-      document.getElementById('modeBadge').className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-950 text-purple-300 border border-purple-800 tracking-wider uppercase';
-      
-      activeRounds = getRandomEndlessRounds();
-      currentRoundIndex = 0;
-      roundChoices = [];
-      
       showGamePlayView();
       renderRound();
     }
@@ -768,7 +726,7 @@
     function showGamePlayView() {
       document.getElementById('gamePlaySection').classList.remove('hidden');
       document.getElementById('resultSection').classList.add('hidden');
-      renderPips();
+      document.getElementById('resultSection').classList.remove('flex');
     }
 
     function renderPips() {
@@ -790,12 +748,13 @@
 
     function renderRound() {
       roundAnswered = false;
-      const roundData = activeRounds[currentRoundIndex];
-      
+      const round = activeRounds[currentRoundIndex];
+
       document.getElementById('currentRoundNum').innerText = currentRoundIndex + 1;
+      document.getElementById('topicTag').innerText = round.topic;
       renderPips();
 
-      // Reset Card Overlays & Borders
+      // Reset card visuals and loaders
       const cardA = document.getElementById('cardA');
       const cardB = document.getElementById('cardB');
       cardA.className = 'glass-card group relative rounded-2xl overflow-hidden cursor-pointer border border-cyber-border hover:border-cyan-400/80 transition-all duration-300 transform hover:-translate-y-1 shadow-lg';
@@ -804,33 +763,42 @@
       document.getElementById('overlayA').style.opacity = '0';
       document.getElementById('overlayB').style.opacity = '0';
 
-      // Load Images
       const imgA = document.getElementById('imgA');
       const imgB = document.getElementById('imgB');
-      imgA.src = roundData.imgA;
-      imgB.src = roundData.imgB;
+      imgA.classList.add('opacity-0');
+      imgB.classList.add('opacity-0');
+      document.getElementById('loaderA').classList.add('img-loading');
+      document.getElementById('loaderB').classList.add('img-loading');
 
-      // Hide Action Strip
+      imgA.src = round.imgA;
+      imgB.src = round.imgB;
+
       document.getElementById('actionStrip').classList.add('hidden');
       document.getElementById('actionStrip').classList.remove('flex');
     }
 
-    function handleChoice(selectedCard) {
+    function imageLoaded(cardKey) {
+      const img = document.getElementById('img' + cardKey);
+      const loader = document.getElementById('loader' + cardKey);
+      img.classList.remove('opacity-0');
+      loader.classList.remove('img-loading');
+    }
+
+    function handleChoice(selected) {
       if (roundAnswered) return;
       roundAnswered = true;
 
       const currentRound = activeRounds[currentRoundIndex];
-      const isCorrect = selectedCard === currentRound.aiKey;
+      const isCorrect = selected === currentRound.aiKey;
       roundChoices.push(isCorrect);
 
-      // Play Sound
       if (isCorrect) {
         audio.playCorrect();
       } else {
         audio.playWrong();
       }
 
-      // Reveal Overlays
+      // Display reveal overlays
       const overlayA = document.getElementById('overlayA');
       const overlayB = document.getElementById('overlayB');
       const badgeA = document.getElementById('badgeA');
@@ -853,10 +821,9 @@
         : 'px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 mb-2';
       tellB.innerText = currentRound.tellB;
 
-      // Highlight Borders
+      // Card outlines
       const cardA = document.getElementById('cardA');
       const cardB = document.getElementById('cardB');
-
       if (currentRound.isAIOnA) {
         cardA.classList.add('ring-2', 'ring-pink-500');
         cardB.classList.add('ring-2', 'ring-emerald-500');
@@ -865,7 +832,7 @@
         cardB.classList.add('ring-2', 'ring-pink-500');
       }
 
-      // Reveal Action Strip
+      // Action strip
       const actionStrip = document.getElementById('actionStrip');
       const verdictIcon = document.getElementById('verdictIconContainer');
       const verdictHead = document.getElementById('verdictHeading');
@@ -879,7 +846,7 @@
         verdictIcon.innerHTML = '✓';
         verdictIcon.className = 'w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
         verdictHead.innerText = 'Spot On! You identified the AI.';
-        verdictSub.innerText = `Image ${currentRound.aiKey} was synthetically generated.`;
+        verdictSub.innerText = `Image ${currentRound.aiKey} was synthetic.`;
       } else {
         verdictIcon.innerHTML = '✕';
         verdictIcon.className = 'w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold bg-rose-500/20 text-rose-400 border border-rose-500/40';
@@ -902,46 +869,29 @@
         currentRoundIndex++;
         renderRound();
       } else {
-        finishGameSession();
+        finishSession();
       }
     }
 
     /* =========================================================================
-       5. GAME COMPLETION & WORDLE-STYLE SCORE SHARING
+       5. GAME COMPLETION, STREAKS & WORDLE SCORE GENERATOR
        ========================================================================= */
-    function finishGameSession() {
+    function finishSession() {
       const correctCount = roundChoices.filter(Boolean).length;
-      const today = getTodayKey();
+      userStats.gamesPlayed += 1;
+      userStats.totalCorrectGuesses += correctCount;
 
-      if (isDailyMode) {
-        // Record in persistent stats
-        userStats.gamesPlayed += 1;
-        userStats.totalCorrectGuesses += correctCount;
-        
-        if (correctCount >= 3) {
-          userStats.currentStreak += 1;
-          if (userStats.currentStreak > userStats.maxStreak) {
-            userStats.maxStreak = userStats.currentStreak;
-          }
-        } else {
-          userStats.currentStreak = 0;
+      if (correctCount >= 3) {
+        userStats.currentStreak += 1;
+        if (userStats.currentStreak > userStats.maxStreak) {
+          userStats.maxStreak = userStats.currentStreak;
         }
-
-        userStats.history[today] = {
-          score: correctCount,
-          choices: [...roundChoices]
-        };
-
-        saveStats();
+      } else {
+        userStats.currentStreak = 0;
       }
 
+      saveState();
       displayResults(correctCount, roundChoices);
-    }
-
-    function showDailyAlreadyCompleted(record) {
-      isDailyMode = true;
-      roundChoices = record.choices;
-      displayResults(record.score, record.choices);
     }
 
     function displayResults(score, choices) {
@@ -951,25 +901,23 @@
 
       document.getElementById('finalScoreTitle').innerText = `${score} / 5 Correct`;
 
-      // Assign Rank Badge & Feedback
       const badge = document.getElementById('resultRankBadge');
       const feedback = document.getElementById('finalFeedbackText');
 
       if (score === 5) {
         badge.innerText = '🏆 Cyber Oracle (100% Intuition)';
         badge.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-emerald-950 text-emerald-300 border border-emerald-800 mb-4';
-        feedback.innerText = 'Flawless victory! No diffusion model could trick your visual perception today.';
+        feedback.innerText = 'Flawless victory! No diffusion model could trick your visual perception.';
       } else if (score >= 3) {
         badge.innerText = '🔍 Turing Detective';
         badge.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-cyan-950 text-cyan-300 border border-cyan-800 mb-4';
-        feedback.innerText = 'Strong human intuition. You spotted the synthetic telltales and micro-artifacts.';
+        feedback.innerText = 'Sharp intuition! You spotted the synthetic cues and micro-artifacts.';
       } else {
-        badge.innerText = '🤖 Bot Bamboozled';
+        badge.innerText = '🤖 Fooled by Diffusion';
         badge.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-rose-950 text-rose-300 border border-rose-800 mb-4';
-        feedback.innerText = 'AI successfully deceived you today! Study the skin reflections and background patterns.';
+        feedback.innerText = 'AI successfully tricked you this round! Study the skin reflections and background patterns.';
       }
 
-      // Visual Emoji Row
       const row = document.getElementById('resultSquareRow');
       row.innerHTML = '';
       choices.forEach(ch => {
@@ -981,33 +929,43 @@
       });
     }
 
+    function updateStatsUI() {
+      document.getElementById('streakCounter').innerText = userStats.currentStreak;
+      document.getElementById('statGamesPlayed').innerText = userStats.gamesPlayed;
+      
+      const totalGuesses = userStats.gamesPlayed * 5;
+      const winPct = totalGuesses > 0 ? Math.round((userStats.totalCorrectGuesses / totalGuesses) * 100) : 0;
+      
+      document.getElementById('statWinPct').innerText = `${winPct}%`;
+      document.getElementById('statMaxStreak').innerText = userStats.maxStreak;
+
+      document.getElementById('modalPlayed').innerText = userStats.gamesPlayed;
+      document.getElementById('modalAccuracy').innerText = `${winPct}%`;
+      document.getElementById('modalStreak').innerText = userStats.currentStreak;
+      document.getElementById('modalBestStreak').innerText = userStats.maxStreak;
+    }
+
     function generateShareText() {
-      const dayNum = getDayNumber();
       const score = roundChoices.filter(Boolean).length;
       const emojis = roundChoices.map(c => c ? '🟩' : '🟥').join('');
-
-      return `PromptGuess #${dayNum} 🤖\n${score}/5 Correct\n${emojis}\n\nCan you beat my score? Play at:\nhttps://promptguess.app`;
+      return `PromptGuess: Real or AI? 🤖\nScore: ${score}/5\n${emojis}\n\nTest your visual intuition:\nhttps://vaseem241.github.io/promptguess/`;
     }
 
     function shareResults() {
       audio.playClick();
       const text = generateShareText();
 
-      // Mobile Native Share if supported
       if (navigator.share) {
         navigator.share({
           title: 'PromptGuess: Real or AI?',
           text: text
-        }).catch(() => {
-          copyToClipboardFallback(text);
-        });
+        }).catch(() => copyToClipboard(text));
       } else {
-        copyToClipboardFallback(text);
+        copyToClipboard(text);
       }
     }
 
-    function copyToClipboardFallback(text) {
-      // Use document.execCommand for resilient iframe execution
+    function copyToClipboard(text) {
       const el = document.createElement('textarea');
       el.value = text;
       el.setAttribute('readonly', '');
@@ -1017,13 +975,13 @@
       el.select();
       try {
         document.execCommand('copy');
-        showToast('Result copied to clipboard! Paste into WhatsApp or X.');
+        showToast('Result copied to clipboard!');
         document.getElementById('shareBtnText').innerText = 'Copied!';
         setTimeout(() => {
           document.getElementById('shareBtnText').innerText = 'Share Result';
         }, 2500);
       } catch (err) {
-        showToast('Please select and copy manually.');
+        showToast('Please copy manually.');
       }
       document.body.removeChild(el);
     }
@@ -1037,35 +995,25 @@
       }, 3000);
     }
 
-    /* =========================================================================
-       6. COUNTDOWN TIMER TO NEXT UTC MIDNIGHT
-       ========================================================================= */
     function startCountdown() {
       function update() {
         const now = new Date();
         const tomorrow = new Date();
         tomorrow.setUTCHours(24, 0, 0, 0);
-        
         const diff = tomorrow - now;
         if (diff <= 0) {
           document.getElementById('midnightCountdown').innerText = '00:00:00';
           return;
         }
-
         const hrs = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
         const mins = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
         const secs = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
-
         document.getElementById('midnightCountdown').innerText = `${hrs}:${mins}:${secs}`;
       }
-
       update();
       setInterval(update, 1000);
     }
 
-    /* =========================================================================
-       7. UI TOGGLES, MODALS & DEV UTILITIES
-       ========================================================================= */
     function toggleStatsModal(show) {
       audio.playClick();
       const modal = document.getElementById('statsModal');
@@ -1084,20 +1032,6 @@
       document.getElementById('soundIconOff').classList.toggle('hidden', isSound);
     });
 
-    function openSponsorLink() {
-      audio.playClick();
-      window.open('https://workers.cloudflare.com', '_blank');
-    }
-
-    function resetDayDataForTesting() {
-      const today = getTodayKey();
-      delete userStats.history[today];
-      saveStats();
-      showToast('Daily challenge reset. Starting fresh round!');
-      startDailyChallenge();
-    }
-
-    // Initialize once DOM is ready
     window.addEventListener('DOMContentLoaded', () => {
       initGame();
     });
