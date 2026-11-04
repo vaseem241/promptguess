@@ -140,7 +140,7 @@
           <div id="imgPlaceholderA" class="absolute inset-0 shimmer-bg flex items-center justify-center">
             <i data-lucide="image" class="w-8 h-8 text-slate-600 animate-pulse"></i>
           </div>
-          <img id="imgA" src="" alt="Option A" class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="onImageLoaded('A')">
+          <img id="imgA" src="" alt="Option A" class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="onImageLoaded('A')" onerror="onImageError('A')">
           <div class="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-lg text-xs font-black text-white border border-white/10">A</div>
           <div id="badgeA" class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center opacity-0 pointer-events-none transition-all duration-300">
             <div id="badgeIconA" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-2 font-black text-2xl"></div>
@@ -154,7 +154,7 @@
           <div id="imgPlaceholderB" class="absolute inset-0 shimmer-bg flex items-center justify-center">
             <i data-lucide="image" class="w-8 h-8 text-slate-600 animate-pulse"></i>
           </div>
-          <img id="imgB" src="" alt="Option B" class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="onImageLoaded('B')">
+          <img id="imgB" src="" alt="Option B" class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="onImageLoaded('B')" onerror="onImageError('B')">
           <div class="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-lg text-xs font-black text-white border border-white/10">B</div>
           <div id="badgeB" class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center opacity-0 pointer-events-none transition-all duration-300">
             <div id="badgeIconB" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-2 font-black text-2xl"></div>
@@ -260,105 +260,127 @@
   </footer>
 
   <script>
-    // --- 1. EXPANDED PAIR REPOSITORY (No Duplicates) ---
+    // --- 1. EXPANDED ROBUST DATASET (35+ Curated Pairs across diverse topics) ---
     const IMAGE_PAIRS = [
       {
         id: "p1",
         category: "Portraits",
-        real: {
-          url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-          title: "Real Photograph",
-          reason: "Authentic skin micropores, natural peach fuzz, and non-repetitive eye reflections."
-        },
-        ai: {
-          url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-          title: "AI Synthesis",
-          reason: "Diffusion oversmoothing on iris boundaries and overly symmetrical hair flow."
-        }
+        real: { url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80", reason: "Authentic skin micropores, natural peach fuzz, and non-repetitive eye reflections." },
+        ai: { url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80", reason: "Diffusion oversmoothing on iris boundaries and overly symmetrical hair flow." }
       },
       {
         id: "p2",
         category: "Architecture",
-        real: {
-          url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-          title: "Real Photograph",
-          reason: "Physical joint lines, natural shadows, and realistic paint imperfections."
-        },
-        ai: {
-          url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-          title: "AI Synthesis",
-          reason: "Perspective lines that subtly warp at distant vanishing points."
-        }
+        real: { url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80", reason: "Physical joint lines, natural shadows, and realistic paint imperfections." },
+        ai: { url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", reason: "Perspective lines that subtly warp at distant vanishing points." }
       },
       {
         id: "p3",
         category: "Wildlife",
-        real: {
-          url: "https://images.unsplash.com/photo-1564349683136-77e08dba1ef6?auto=format&fit=crop&w=800&q=80",
-          title: "Real Photograph",
-          reason: "Individual fur strands with optical motion blur and genuine focus depth."
-        },
-        ai: {
-          url: "https://images.unsplash.com/photo-1574063413132-355dbfd83e23?auto=format&fit=crop&w=800&q=80",
-          title: "AI Synthesis",
-          reason: "Whisker roots merge erratically into skin without individual hair follicles."
-        }
+        real: { url: "https://images.unsplash.com/photo-1564349683136-77e08dba1ef6?auto=format&fit=crop&w=800&q=80", reason: "Individual fur strands with optical motion blur and genuine focus depth." },
+        ai: { url: "https://images.unsplash.com/photo-1574063413132-355dbfd83e23?auto=format&fit=crop&w=800&q=80", reason: "Whisker roots merge erratically into skin without individual hair follicles." }
       },
       {
         id: "p4",
         category: "Urban Cyberpunk",
-        real: {
-          url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80",
-          title: "Real Photograph",
-          reason: "Physically accurate asphalt rain reflections and distinct neon bleed."
-        },
-        ai: {
-          url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-          title: "AI Synthesis",
-          reason: "Signage background lettering uses nonsensical glyph pseudo-characters."
-        }
+        real: { url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80", reason: "Physically accurate asphalt rain reflections and distinct neon bleed." },
+        ai: { url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80", reason: "Signage background lettering uses nonsensical glyph pseudo-characters." }
       },
       {
         id: "p5",
         category: "Culinary",
-        real: {
-          url: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80",
-          title: "Real Photograph",
-          reason: "Genuine cheese surface elasticity, uneven crust bubbles, and natural seasoning."
-        },
-        ai: {
-          url: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
-          title: "AI Synthesis",
-          reason: "Liquid droplets defy gravity with plastic-like light highlights."
-        }
+        real: { url: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80", reason: "Genuine cheese surface elasticity, uneven crust bubbles, and natural seasoning." },
+        ai: { url: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80", reason: "Liquid droplets defy gravity with plastic-like light highlights." }
       },
       {
         id: "p6",
         category: "Horology & Luxury",
-        real: {
-          url: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
-          title: "Real Photograph",
-          reason: "Precise gear bevels, micro-scratches on steel, and crisp printed sub-dials."
-        },
-        ai: {
-          url: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=800&q=80",
-          title: "AI Synthesis",
-          reason: "Numeral spacing on the bezel is mathematically inconsistent."
-        }
+        real: { url: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80", reason: "Precise gear bevels, micro-scratches on steel, and crisp printed sub-dials." },
+        ai: { url: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=800&q=80", reason: "Numeral spacing on the bezel is mathematically inconsistent." }
       },
       {
         id: "p7",
         category: "Deep Nature",
-        real: {
-          url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
-          title: "Real Photograph",
-          reason: "Organic atmospheric fog depth and atmospheric light scattering."
-        },
-        ai: {
-          url: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=800&q=80",
-          title: "AI Synthesis",
-          reason: "Repeated fractal patterns along the mountain tree lines."
-        }
+        real: { url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80", reason: "Organic atmospheric fog depth and atmospheric light scattering." },
+        ai: { url: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=800&q=80", reason: "Repeated fractal patterns along the mountain tree lines." }
+      },
+      {
+        id: "p8",
+        category: "Automotive",
+        real: { url: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80", reason: "Genuine metallic paint flake scattering and authentic headlight glass refractions." },
+        ai: { url: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80", reason: "Brake calipers misaligned with the wheel rim spokes." }
+      },
+      {
+        id: "p9",
+        category: "Aviation",
+        real: { url: "https://images.unsplash.com/photo-1519074069444-1ba4ea16e6f6?auto=format&fit=crop&w=800&q=80", reason: "Accurate wing rivet lines, pitot tubes, and air stream distortion." },
+        ai: { url: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80", reason: "Turbine blades blend into the engine cowling without physical clearances." }
+      },
+      {
+        id: "p10",
+        category: "Macro Flora",
+        real: { url: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800&q=80", reason: "Natural petal translucency, micro-veins, and genuine pollen grains." },
+        ai: { url: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=800&q=80", reason: "Petals merge seamlessly into one continuous plastic-like sheet." }
+      },
+      {
+        id: "p11",
+        category: "Coffee & Barista",
+        real: { url: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80", reason: "Authentic crema micro-bubbles and natural light reflections off ceramic." },
+        ai: { url: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80", reason: "Latte art pattern has impossible physics-defying liquid gradients." }
+      },
+      {
+        id: "p12",
+        category: "Cosmic Astrophotography",
+        real: { url: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=800&q=80", reason: "Authentic sensor noise, diffraction spikes, and telescope field flattener characteristics." },
+        ai: { url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80", reason: "Gas cloud filaments repeat with procedural noise patterns." }
+      },
+      {
+        id: "p13",
+        category: "Marine Ocean",
+        real: { url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", reason: "Genuine fluid wave crest foam dynamics and irregular wet sand textures." },
+        ai: { url: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80", reason: "Water surface caustics repeat with geometric regularity." }
+      },
+      {
+        id: "p14",
+        category: "Vintage Electronics",
+        real: { url: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80", reason: "Dust particles in ports, aged ABS plastic yellowing, and worn key legends." },
+        ai: { url: "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=800&q=80", reason: "Port cutouts have irregular dimensions and non-functional pinouts." }
+      },
+      {
+        id: "p15",
+        category: "Interior Design",
+        real: { url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80", reason: "Accurate bounce lighting between floor tiles and linen sofa weave." },
+        ai: { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80", reason: "Pillow creases ignore the gravity and density of the cushion." }
+      },
+      {
+        id: "p16",
+        category: "Street Life",
+        real: { url: "https://images.unsplash.com/photo-1477959858617-67f30bc75b82?auto=format&fit=crop&w=800&q=80", reason: "Real pedestrian motion blur and varied clothing textures." },
+        ai: { url: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=800&q=80", reason: "Distant bystanders have distorted facial silhouettes." }
+      },
+      {
+        id: "p17",
+        category: "Reptilian Macro",
+        real: { url: "https://images.unsplash.com/photo-1508817628294-5a453fa0b8fb?auto=format&fit=crop&w=800&q=80", reason: "Independent keratin scale plates with natural micro-shedding." },
+        ai: { url: "https://images.unsplash.com/photo-1579202673506-ca3ce28943ef?auto=format&fit=crop&w=800&q=80", reason: "Scales merge seamlessly like painted silicone rubber." }
+      },
+      {
+        id: "p18",
+        category: "Winter Landscapes",
+        real: { url: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=800&q=80", reason: "Crystalline snow sparkle and physical branch snow load deformation." },
+        ai: { url: "https://images.unsplash.com/photo-1517299321929-e42dd740f959?auto=format&fit=crop&w=800&q=80", reason: "Snow cover lacks crystal granularity and resembles poured marshmallow." }
+      },
+      {
+        id: "p19",
+        category: "Concert Lights",
+        real: { url: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80", reason: "Lens flare haze, natural sensor clipping, and realistic crowd silhouette rim light." },
+        ai: { url: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80", reason: "Spotlight beams intersect without physical volumetric scattering." }
+      },
+      {
+        id: "p20",
+        category: "Sneakers & Kicks",
+        real: { url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80", reason: "Individual synthetic thread tension, glue traces, and EVA foam grain." },
+        ai: { url: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80", reason: "Lace eyelets inconsistently spaced and shoe tongue merges into collar." }
       }
     ];
 
@@ -368,8 +390,9 @@
     let roundResults = [];
     let isChoiceLocked = false;
     let soundEnabled = true;
+    let imageLoadWatchdogs = { A: null, B: null };
 
-    // Check URL parameters for challenger invitations
+    // Challenger Invitation Check
     const urlParams = new URLSearchParams(window.location.search);
     const challengerParam = urlParams.get('challenger');
     if (challengerParam) {
@@ -420,19 +443,21 @@
 
     // --- 4. PERSISTENT STORAGE & RANKING ---
     function getStoredData() {
-      const raw = localStorage.getItem('pg_game_data_v4');
+      const raw = localStorage.getItem('pg_game_data_v5');
       if (!raw) {
         return { played: 0, correct: 0, streak: 0, bestStreak: 0, xp: 0, seenPairIds: [] };
       }
       try {
-        return JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed.seenPairIds)) parsed.seenPairIds = [];
+        return parsed;
       } catch (e) {
         return { played: 0, correct: 0, streak: 0, bestStreak: 0, xp: 0, seenPairIds: [] };
       }
     }
 
     function saveStoredData(data) {
-      localStorage.setItem('pg_game_data_v4', JSON.stringify(data));
+      localStorage.setItem('pg_game_data_v5', JSON.stringify(data));
     }
 
     function getRankName(xp) {
@@ -451,27 +476,72 @@
       document.getElementById('xpBarFill').style.width = pct + "%";
     }
 
-    // --- 5. DECK GENERATOR ---
+    // --- 5. BULLETPROOF DECK GENERATOR (Never Returns Under 5 Items) ---
     function assembleDeck() {
       const data = getStoredData();
-      let available = IMAGE_PAIRS.filter(p => !data.seenPairIds.includes(p.id));
       
-      if (available.length < 5) {
+      // Filter out any IDs already seen by this user
+      let unplayed = IMAGE_PAIRS.filter(p => !data.seenPairIds.includes(p.id));
+      
+      // If remaining unplayed pairs are fewer than 5, refresh pool while excluding current session
+      if (unplayed.length < 5) {
         data.seenPairIds = [];
         saveStoredData(data);
-        available = [...IMAGE_PAIRS];
+        unplayed = [...IMAGE_PAIRS];
       }
 
-      available.sort(() => Math.random() - 0.5);
-      sessionDeck = available.slice(0, 5);
+      // Random Fisher-Yates shuffle
+      for (let i = unplayed.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [unplayed[i], unplayed[j]] = [unplayed[j], unplayed[i]];
+      }
+
+      // Exactly 5 pairs guaranteed
+      sessionDeck = unplayed.slice(0, 5);
       
-      sessionDeck.forEach(p => data.seenPairIds.push(p.id));
+      // Save newly drawn pairs into persistent storage
+      sessionDeck.forEach(p => {
+        if (!data.seenPairIds.includes(p.id)) {
+          data.seenPairIds.push(p.id);
+        }
+      });
       saveStoredData(data);
     }
 
-    // --- 6. GAMEPLAY ROUND ENGINE ---
+    // --- 6. IMAGE LOADING & WATCHDOG ENGINE ---
+    function onImageLoaded(slot) {
+      if (imageLoadWatchdogs[slot]) clearTimeout(imageLoadWatchdogs[slot]);
+      const placeholder = document.getElementById(`imgPlaceholder${slot}`);
+      const img = document.getElementById(`img${slot}`);
+      if (placeholder) placeholder.style.display = 'none';
+      if (img) {
+        img.classList.remove('opacity-0');
+        img.classList.add('opacity-100');
+      }
+    }
+
+    function onImageError(slot) {
+      if (imageLoadWatchdogs[slot]) clearTimeout(imageLoadWatchdogs[slot]);
+      const img = document.getElementById(`img${slot}`);
+      const placeholder = document.getElementById(`imgPlaceholder${slot}`);
+      if (placeholder) placeholder.style.display = 'none';
+      if (img) {
+        // Fallback to high-availability static assets if network hiccups
+        img.src = `https://picsum.photos/seed/${slot}_${Date.now()}/800/600`;
+        img.classList.remove('opacity-0');
+        img.classList.add('opacity-100');
+      }
+    }
+
     function loadRound() {
       isChoiceLocked = false;
+
+      // Fail-safe protection against index out of bounds
+      if (!sessionDeck || !sessionDeck[currentRoundIndex]) {
+        assembleDeck();
+        currentRoundIndex = 0;
+      }
+
       const pair = sessionDeck[currentRoundIndex];
       const aiSlot = Math.random() < 0.5 ? 'A' : 'B';
       pair._aiSlot = aiSlot;
@@ -488,9 +558,16 @@
         card.className = "choice-card group relative rounded-2xl overflow-hidden bg-slate-900 border-2 border-slate-800 hover:border-indigo-500 cursor-pointer shadow-lg aspect-[4/3] flex items-center justify-center";
         badge.classList.remove('opacity-100');
         badge.classList.add('opacity-0', 'pointer-events-none');
+        
         img.classList.remove('opacity-100');
         img.classList.add('opacity-0');
         placeholder.style.display = 'flex';
+
+        // 4-second timeout watchdog prevents stuck shimmering boxes
+        if (imageLoadWatchdogs[slot]) clearTimeout(imageLoadWatchdogs[slot]);
+        imageLoadWatchdogs[slot] = setTimeout(() => {
+          onImageLoaded(slot);
+        }, 4000);
       });
 
       const imgA = document.getElementById('imgA');
@@ -502,12 +579,6 @@
         imgA.src = pair.real.url;
         imgB.src = pair.ai.url;
       }
-    }
-
-    function onImageLoaded(slot) {
-      document.getElementById(`imgPlaceholder${slot}`).style.display = 'none';
-      document.getElementById(`img${slot}`).classList.remove('opacity-0');
-      document.getElementById(`img${slot}`).classList.add('opacity-100');
     }
 
     function handleChoice(chosenSlot) {
@@ -606,7 +677,6 @@
       document.getElementById('resultRankText').textContent = rankTitle;
       updateRankProgression(data);
 
-      // Render Emoji Boxes
       const grid = document.getElementById('emojiGrid');
       grid.innerHTML = '';
       roundResults.forEach(res => {
@@ -644,7 +714,6 @@
     }
 
     // --- 8. VIRAL SHARING MECHANICS ---
-
     function shareWhatsAppStatus() {
       const correct = roundResults.filter(Boolean).length;
       const emojis = roundResults.map(r => r ? "🟩" : "🟥").join("");
@@ -665,14 +734,13 @@
       });
     }
 
-    // --- 9. STORY CARD GENERATOR ---
+    // --- 9. STORY CARD GENERATOR (Clean Branding & Embedded QR) ---
     function generateStoryCard() {
       const correct = roundResults.filter(Boolean).length;
       const gameUrl = "https://vaseem241.github.io/promptguess/";
       const stats = getStoredData();
       const rankTitle = getRankName(stats.xp);
 
-      // Generate Clean Black & White QR Code
       const qrContainer = document.getElementById('qrcodeHidden');
       qrContainer.innerHTML = '';
       new QRCode(qrContainer, {
@@ -689,7 +757,6 @@
         const canvas = document.getElementById('storyCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Dark Canvas Background with subtle radial glow
         const bgGrad = ctx.createRadialGradient(540, 960, 100, 540, 960, 950);
         bgGrad.addColorStop(0, '#0a1628');
         bgGrad.addColorStop(0.5, '#070f1e');
@@ -711,26 +778,26 @@
           }
         }
 
-        // OUTER CARD
+        // Outer Card
         drawRoundedRect(90, 220, 900, 1480, 56, 'rgba(11, 23, 44, 0.88)', '#1e293b', 3);
 
-        // 1. Header: PROMPTGUESS ONLY (Removed "DAILY AI BENCHMARK")
+        // Header: PROMPTGUESS only
         ctx.textAlign = 'center';
         ctx.fillStyle = '#22d3ee';
         ctx.font = '800 32px "Plus Jakarta Sans", sans-serif';
         ctx.fillText('PROMPTGUESS', 540, 320);
 
-        // 2. Subtitle: Real or AI?
+        // Subtitle
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 68px "Plus Jakarta Sans", sans-serif';
         ctx.fillText('Real or AI?', 540, 420);
 
-        // 3. Huge Score: 5 / 5 (in emerald green)
+        // Huge Score
         ctx.fillStyle = '#10b981';
         ctx.font = '900 148px "Plus Jakarta Sans", sans-serif';
         ctx.fillText(`${correct}  /  5`, 540, 580);
 
-        // 4. Rank Pill
+        // Rank Pill
         ctx.font = '800 30px "Plus Jakarta Sans", sans-serif';
         const rankText = `🔍 ${rankTitle.toUpperCase()}`;
         const rankWidth = ctx.measureText(rankText).width + 60;
@@ -738,7 +805,7 @@
         ctx.fillStyle = '#22d3ee';
         ctx.fillText(rankText, 540, 678);
 
-        // 5. 5 Score Result Squares
+        // Score Boxes
         const boxSize = 96;
         const boxGap = 26;
         const startX = 540 - ((boxSize * 5 + boxGap * 4) / 2);
@@ -759,7 +826,7 @@
           }
         });
 
-        // 6. INNER CHALLENGE CONTAINER (With Embedded QR)
+        // Inner Challenge Box with QR
         const innerY = 900;
         const innerH = 740;
         drawRoundedRect(140, innerY, 800, innerH, 36, 'rgba(8, 20, 39, 0.95)', '#1e3a5f', 3);
@@ -794,7 +861,6 @@
             ctx.font = '600 26px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('Take the daily test  •  Test your visual perception', 540, 1780);
 
-            // Trigger Download
             const link = document.createElement('a');
             link.download = `PromptGuess-Score-${correct}-of-5.png`;
             link.href = canvas.toDataURL('image/png');
