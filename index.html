@@ -14,13 +14,13 @@
   <meta property="og:url" content="https://vaseem241.github.io/promptguess/">
   <meta property="og:type" content="website">
 
-  <!-- Embedded SVG Favicon (Solves Missing Icon Issue) -->
+  <!-- Embedded SVG Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%236366f1'/><stop offset='50%' stop-color='%238b5cf6'/><stop offset='100%' stop-color='%2306b6d4'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><circle cx='35' cy='46' r='9' fill='%23ffffff'/><circle cx='65' cy='46' r='9' fill='%23ffffff'/><circle cx='35' cy='46' r='4' fill='%230f172a'/><circle cx='65' cy='46' r='4' fill='%230f172a'/><path d='M34 68 Q50 82 66 68' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' fill='none'/><path d='M50 14 L50 26' stroke='%23ffffff' stroke-width='6' stroke-linecap='round'/><circle cx='50' cy='12' r='4' fill='%2322d3ee'/></svg>">
 
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- QRCode.js for creating the in-story QR code -->
+  <!-- QRCode.js for generating the high-res QR code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
@@ -83,9 +83,6 @@
         <button id="soundToggleBtn" class="p-2 rounded-full bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 transition-colors">
           <i id="soundIcon" data-lucide="volume-2" class="w-4 h-4"></i>
         </button>
-        <button id="statsOpenBtn" class="p-2 rounded-full bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 transition-colors">
-          <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
-        </button>
       </div>
     </div>
   </header>
@@ -93,7 +90,7 @@
   <!-- MAIN GAME VIEW CONTAINER -->
   <main class="flex-grow flex flex-col items-center justify-center px-4 py-6 max-w-4xl mx-auto w-full">
     
-    <!-- CHALLENGER CALLOUT (if opened from a friend's link) -->
+    <!-- CHALLENGER BANNER -->
     <div id="challengerBanner" class="hidden w-full mb-4 p-3 rounded-2xl bg-gradient-to-r from-indigo-950/80 via-purple-950/80 to-slate-900 border border-indigo-700/60 text-xs text-center flex items-center justify-center space-x-2">
       <i data-lucide="swords" class="w-4 h-4 text-cyan-400"></i>
       <span>A friend scored <strong id="challengerScore" class="text-white">4/5</strong>! Can you beat their vision?</span>
@@ -121,7 +118,6 @@
           <span id="roundIndicator" class="text-sm font-black text-cyan-400 font-mono">1 / 5</span>
         </div>
         <div class="flex space-x-1.5" id="roundDots">
-          <!-- 5 step pills -->
           <div class="w-6 h-1.5 rounded-full bg-slate-800 border border-slate-700/60 transition-all"></div>
           <div class="w-6 h-1.5 rounded-full bg-slate-800 border border-slate-700/60 transition-all"></div>
           <div class="w-6 h-1.5 rounded-full bg-slate-800 border border-slate-700/60 transition-all"></div>
@@ -146,7 +142,6 @@
           </div>
           <img id="imgA" src="" alt="Option A" class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="onImageLoaded('A')">
           <div class="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-lg text-xs font-black text-white border border-white/10">A</div>
-          <!-- Feedback Badge Overlay -->
           <div id="badgeA" class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center opacity-0 pointer-events-none transition-all duration-300">
             <div id="badgeIconA" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-2 font-black text-2xl"></div>
             <h3 id="badgeTitleA" class="text-lg font-black tracking-tight mb-1"></h3>
@@ -161,7 +156,6 @@
           </div>
           <img id="imgB" src="" alt="Option B" class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="onImageLoaded('B')">
           <div class="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-lg text-xs font-black text-white border border-white/10">B</div>
-          <!-- Feedback Badge Overlay -->
           <div id="badgeB" class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center opacity-0 pointer-events-none transition-all duration-300">
             <div id="badgeIconB" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-2 font-black text-2xl"></div>
             <h3 id="badgeTitleB" class="text-lg font-black tracking-tight mb-1"></h3>
@@ -171,13 +165,13 @@
 
       </div>
 
-      <!-- CONTINUE / NEXT BUTTON (Appears after answer) -->
+      <!-- CONTINUE BUTTON -->
       <button id="nextRoundBtn" onclick="nextRound()" class="hidden px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-cyan-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center space-x-2">
         <span>Continue to Next Round</span>
         <i data-lucide="arrow-right" class="w-4 h-4"></i>
       </button>
 
-      <!-- SAFE INTERNAL SPONSOR LINK (Redirects to PromptGuess) -->
+      <!-- SAFE INTERNAL SPONSOR LINK -->
       <div class="w-full max-w-xl mt-6">
         <a href="https://vaseem241.github.io/promptguess/" class="block p-3.5 rounded-xl bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/50 transition-all text-center group">
           <p class="text-[10px] uppercase font-bold tracking-wider text-slate-500 group-hover:text-cyan-400 transition-colors">Sponsored Community Partner</p>
@@ -186,7 +180,7 @@
       </div>
     </div>
 
-    <!-- POST-GAME VICTORY / STATS CARD (Shown after 5 rounds) -->
+    <!-- POST-GAME VICTORY / STATS CARD -->
     <div id="resultModal" class="hidden w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl backdrop-blur-xl flex flex-col items-center text-center neon-border">
       <div id="resultBadge" class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800 text-xs font-black uppercase mb-3">
         <i data-lucide="award" class="w-3.5 h-3.5"></i>
@@ -201,10 +195,10 @@
 
       <!-- VIRAL ACTION BUTTONS -->
       <div class="w-full flex flex-col gap-2.5 mb-6">
-        <!-- 1. Download Status / Story Card (Contains embedded QR Code) -->
+        <!-- 1. Download Status Card with Embedded QR Code -->
         <button onclick="generateStoryCard()" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2 transition-transform active:scale-[0.98]">
           <i data-lucide="download" class="w-4 h-4"></i>
-          <span>Save Story Card (with Scan-to-Play QR)</span>
+          <span>Save Story Image (WhatsApp / Insta / FB)</span>
         </button>
 
         <!-- 2. Direct Clickable WhatsApp Share -->
@@ -213,7 +207,7 @@
           <span>Post Directly to WhatsApp Status</span>
         </button>
 
-        <!-- 3. Copy Challenge Link For Friends -->
+        <!-- 3. Challenge Link / Play Again -->
         <div class="grid grid-cols-2 gap-2">
           <button onclick="copyChallengeLink()" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700/80 flex items-center justify-center space-x-1.5 transition-colors">
             <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
@@ -226,7 +220,7 @@
         </div>
       </div>
 
-      <!-- SAFE INTERNAL SPONSOR LINK IN SUMMARY (Redirects to PromptGuess) -->
+      <!-- INTERNAL SPONSOR LINK -->
       <a href="https://vaseem241.github.io/promptguess/" class="w-full p-3 rounded-xl bg-slate-950/80 hover:bg-slate-950 border border-slate-800 text-center transition-all mb-4 block">
         <p class="text-[9px] uppercase font-bold tracking-widest text-slate-500">Sponsored Community Partner</p>
         <p class="text-xs font-semibold text-slate-300">Play endless rounds and test visual perception →</p>
@@ -254,10 +248,10 @@
     </div>
   </main>
 
-  <!-- HIDDEN QR CODE HOLDER FOR THE STORY CANVAS -->
+  <!-- HIDDEN QR CODE HOLDER -->
   <div id="qrcodeHidden" class="hidden"></div>
 
-  <!-- HIDDEN STORY CANVAS FOR HIGH-RES EXPORT -->
+  <!-- HIDDEN STORY CANVAS FOR 1080x1920 EXPORT -->
   <canvas id="storyCanvas" class="hidden" width="1080" height="1920"></canvas>
 
   <!-- FOOTER -->
@@ -371,7 +365,7 @@
     // --- 2. GAME STATE MANAGEMENT ---
     let sessionDeck = [];
     let currentRoundIndex = 0;
-    let roundResults = []; // array of true/false
+    let roundResults = [];
     let isChoiceLocked = false;
     let soundEnabled = true;
 
@@ -428,14 +422,7 @@
     function getStoredData() {
       const raw = localStorage.getItem('pg_game_data_v4');
       if (!raw) {
-        return {
-          played: 0,
-          correct: 0,
-          streak: 0,
-          bestStreak: 0,
-          xp: 0,
-          seenPairIds: []
-        };
+        return { played: 0, correct: 0, streak: 0, bestStreak: 0, xp: 0, seenPairIds: [] };
       }
       try {
         return JSON.parse(raw);
@@ -448,45 +435,36 @@
       localStorage.setItem('pg_game_data_v4', JSON.stringify(data));
     }
 
+    function getRankName(xp) {
+      if (xp >= 1200) return "Visual Oracle";
+      if (xp >= 600) return "Turing Detective";
+      if (xp >= 300) return "AI Whisperer";
+      if (xp >= 100) return "Synthetic Spotter";
+      return "Novice Observer";
+    }
+
     function updateRankProgression(stats) {
-      const ranks = [
-        { name: "Novice Observer", minXP: 0 },
-        { name: "Synthetic Spotter", minXP: 100 },
-        { name: "AI Whisperer", minXP: 300 },
-        { name: "Turing Detective", minXP: 600 },
-        { name: "Visual Oracle", minXP: 1200 }
-      ];
-      let currentRank = ranks[0].name;
-      let nextMin = 100;
-      for (let i = 0; i < ranks.length; i++) {
-        if (stats.xp >= ranks[i].minXP) {
-          currentRank = ranks[i].name;
-          nextMin = ranks[i+1] ? ranks[i+1].minXP : stats.xp + 500;
-        }
-      }
-      document.getElementById('playerRankTitle').textContent = currentRank;
+      const rank = getRankName(stats.xp);
+      document.getElementById('playerRankTitle').textContent = rank;
       document.getElementById('xpText').textContent = stats.xp + " XP";
-      const pct = Math.min(100, Math.round((stats.xp / nextMin) * 100));
+      const pct = Math.min(100, Math.round((stats.xp / 600) * 100));
       document.getElementById('xpBarFill').style.width = pct + "%";
     }
 
-    // --- 5. DECK GENERATOR (Strict Anti-Repeat Logic) ---
+    // --- 5. DECK GENERATOR ---
     function assembleDeck() {
       const data = getStoredData();
       let available = IMAGE_PAIRS.filter(p => !data.seenPairIds.includes(p.id));
       
-      // If user has seen all pictures, reset history and recycle gracefully
       if (available.length < 5) {
         data.seenPairIds = [];
         saveStoredData(data);
         available = [...IMAGE_PAIRS];
       }
 
-      // Shuffle
       available.sort(() => Math.random() - 0.5);
       sessionDeck = available.slice(0, 5);
       
-      // Mark these as played in persistent tracking
       sessionDeck.forEach(p => data.seenPairIds.push(p.id));
       saveStoredData(data);
     }
@@ -498,11 +476,9 @@
       const aiSlot = Math.random() < 0.5 ? 'A' : 'B';
       pair._aiSlot = aiSlot;
 
-      // Update UI Counters
       document.getElementById('roundIndicator').textContent = `${currentRoundIndex + 1} / 5`;
       document.getElementById('nextRoundBtn').classList.add('hidden');
 
-      // Reset Card Borders & Overlays
       ['A', 'B'].forEach(slot => {
         const card = document.getElementById(`card${slot}`);
         const badge = document.getElementById(`badge${slot}`);
@@ -517,7 +493,6 @@
         placeholder.style.display = 'flex';
       });
 
-      // Assign image sources
       const imgA = document.getElementById('imgA');
       const imgB = document.getElementById('imgB');
       if (aiSlot === 'A') {
@@ -543,7 +518,6 @@
       const isCorrect = (chosenSlot === pair._aiSlot);
       roundResults.push(isCorrect);
 
-      // Play Sound & Haptic Feedback
       if (isCorrect) {
         AudioEngine.correct();
         if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
@@ -552,7 +526,6 @@
         if (navigator.vibrate) navigator.vibrate(180);
       }
 
-      // Update Round Progress Pill
       const dots = document.getElementById('roundDots').children;
       if (dots[currentRoundIndex]) {
         dots[currentRoundIndex].className = isCorrect 
@@ -560,7 +533,6 @@
           : "w-6 h-1.5 rounded-full bg-rose-500 shadow-md shadow-rose-500/50";
       }
 
-      // Reveal Cards
       ['A', 'B'].forEach(slot => {
         const isAI = (slot === pair._aiSlot);
         const card = document.getElementById(`card${slot}`);
@@ -590,7 +562,6 @@
         badge.classList.add('opacity-100');
       });
 
-      // Show Continue Button
       document.getElementById('nextRoundBtn').classList.remove('hidden');
     }
 
@@ -612,7 +583,6 @@
       const correctCount = roundResults.filter(Boolean).length;
       document.getElementById('finalScoreTitle').textContent = `${correctCount} / 5 Correct`;
 
-      // Update Persistent Metrics
       const data = getStoredData();
       data.played++;
       data.correct += correctCount;
@@ -622,16 +592,18 @@
       } else {
         data.streak = 0;
       }
-      data.xp += (correctCount * 30) + 20; // 30 XP per hit + 20 XP completion bonus
+      data.xp += (correctCount * 30) + 20;
       saveStoredData(data);
 
-      // Render Lifetime Stats
       document.getElementById('statTotalPlayed').textContent = data.played;
       const acc = data.played > 0 ? Math.round((data.correct / (data.played * 5)) * 100) : 0;
       document.getElementById('statAccuracy').textContent = acc + "%";
       document.getElementById('statBestStreak').textContent = data.bestStreak;
       document.getElementById('statXP').textContent = data.xp;
       document.getElementById('streakCounter').textContent = data.streak;
+      
+      const rankTitle = getRankName(data.xp);
+      document.getElementById('resultRankText').textContent = rankTitle;
       updateRankProgression(data);
 
       // Render Emoji Boxes
@@ -646,7 +618,6 @@
         grid.appendChild(box);
       });
 
-      // Render Dynamic Feedback
       const feedbackMap = [
         "Synthetic illusionist triumph! Diffusion models fooled you this time.",
         "A respectable start! AI artifacts can be notoriously deceptive.",
@@ -663,7 +634,6 @@
       document.getElementById('resultModal').classList.add('hidden');
       document.getElementById('gamePlaySection').classList.remove('hidden');
       
-      // Reset indicator dots
       const dots = document.getElementById('roundDots').children;
       for (let i = 0; i < dots.length; i++) {
         dots[i].className = "w-6 h-1.5 rounded-full bg-slate-800 border border-slate-700/60";
@@ -675,18 +645,16 @@
 
     // --- 8. VIRAL SHARING MECHANICS ---
 
-    // Direct Clickable WhatsApp Status / Message
     function shareWhatsAppStatus() {
       const correct = roundResults.filter(Boolean).length;
       const emojis = roundResults.map(r => r ? "🟩" : "🟥").join("");
       const gameUrl = "https://vaseem241.github.io/promptguess/?challenger=" + correct;
       
-      const shareText = `🤖 PromptGuess Visual Test\nI scored ${correct}/5! ${emojis}\nCan you tell human photography from synthetic AI?\nPlay here: ${gameUrl}`;
+      const shareText = `🤖 PromptGuess Visual Test\nI scored ${correct}/5! ${emojis}\nCan you beat my score?\nPlay here: ${gameUrl}`;
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
       window.open(waUrl, '_blank');
     }
 
-    // Copy Direct Challenge Link
     function copyChallengeLink() {
       const correct = roundResults.filter(Boolean).length;
       const gameUrl = `https://vaseem241.github.io/promptguess/?challenger=${correct}`;
@@ -697,92 +665,145 @@
       });
     }
 
-    // Generate High-Res 1080x1920 Story Image with Embedded QR Code
+    // --- 9. EXACT SCREENSHOT 1 STORY CARD GENERATOR (WITH INTEGRATED QR) ---
     function generateStoryCard() {
       const correct = roundResults.filter(Boolean).length;
       const gameUrl = "https://vaseem241.github.io/promptguess/";
+      const stats = getStoredData();
+      const rankTitle = getRankName(stats.xp);
 
-      // Generate QR Code into hidden container
+      // Generate Clean Black & White QR Code
       const qrContainer = document.getElementById('qrcodeHidden');
       qrContainer.innerHTML = '';
       new QRCode(qrContainer, {
         text: gameUrl,
-        width: 180,
-        height: 180,
+        width: 260,
+        height: 260,
         colorDark: "#000000",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
 
-      // Allow QR image element to render
       setTimeout(() => {
         const qrImg = qrContainer.querySelector('img');
         const canvas = document.getElementById('storyCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Dark Gradient Background
-        const bgGrad = ctx.createLinearGradient(0, 0, 1080, 1920);
-        bgGrad.addColorStop(0, '#060a12');
-        bgGrad.addColorStop(0.5, '#0f172a');
-        bgGrad.addColorStop(1, '#020617');
+        // Dark Canvas Background with subtle radial glow (Matches Screenshot 1)
+        const bgGrad = ctx.createRadialGradient(540, 960, 100, 540, 960, 950);
+        bgGrad.addColorStop(0, '#0a1628');
+        bgGrad.addColorStop(0.5, '#070f1e');
+        bgGrad.addColorStop(1, '#030712');
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, 1080, 1920);
 
-        // Header Title
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '900 64px "Plus Jakarta Sans", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('PROMPTGUESS', 540, 280);
-
-        ctx.fillStyle = '#38bdf8';
-        ctx.font = '700 32px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText('CAN YOU SPOT THE AI?', 540, 350);
-
-        // Central Score Card
-        ctx.fillStyle = 'rgba(30, 41, 59, 0.7)';
-        ctx.roundRect(140, 480, 800, 700, 40);
-        ctx.fill();
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '900 130px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText(`${correct} / 5`, 540, 700);
-
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '600 36px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText('Correct Answers', 540, 780);
-
-        // Emoji Results Representation
-        const startX = 260;
-        roundResults.forEach((res, i) => {
-          ctx.fillStyle = res ? '#10b981' : '#f43f5e';
+        // Helper function for rounded rectangles
+        function drawRoundedRect(x, y, w, h, r, fill, stroke, strokeWidth) {
           ctx.beginPath();
-          ctx.roundRect(startX + (i * 120), 870, 80, 80, 18);
-          ctx.fill();
+          ctx.roundRect(x, y, w, h, r);
+          if (fill) {
+            ctx.fillStyle = fill;
+            ctx.fill();
+          }
+          if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = strokeWidth || 1;
+            ctx.stroke();
+          }
+        }
 
-          ctx.fillStyle = '#ffffff';
-          ctx.font = '900 42px "Plus Jakarta Sans", sans-serif';
-          ctx.fillText(res ? '✓' : '✕', startX + (i * 120) + 40, 928);
+        // OUTER CARD (Frosted dark blue glass with rounded corners)
+        drawRoundedRect(90, 220, 900, 1480, 56, 'rgba(11, 23, 44, 0.88)', '#1e293b', 3);
+
+        // 1. Header: PROMPTGUESS • DAILY AI BENCHMARK
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#22d3ee';
+        ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
+        ctx.letterSpacing = '2px';
+        ctx.fillText('PROMPTGUESS  •  DAILY AI BENCHMARK', 540, 320);
+
+        // 2. Subtitle: Real or AI?
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 68px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText('Real or AI?', 540, 420);
+
+        // 3. Huge Score: 3 / 5 (in emerald green)
+        ctx.fillStyle = '#10b981';
+        ctx.font = '900 148px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(`${correct}  /  5`, 540, 580);
+
+        // 4. Rank Pill: [🔍 TURING DETECTIVE]
+        ctx.font = '800 30px "Plus Jakarta Sans", sans-serif';
+        const rankText = `🔍 ${rankTitle.toUpperCase()}`;
+        const rankWidth = ctx.measureText(rankText).width + 60;
+        drawRoundedRect(540 - (rankWidth / 2), 640, rankWidth, 54, 27, 'rgba(6, 182, 212, 0.12)', '#0e7490', 2);
+        ctx.fillStyle = '#22d3ee';
+        ctx.fillText(rankText, 540, 678);
+
+        // 5. 5 Score Result Squares (Matches Screenshot 1 icons)
+        const boxSize = 96;
+        const boxGap = 26;
+        const startX = 540 - ((boxSize * 5 + boxGap * 4) / 2);
+        const boxesY = 740;
+
+        roundResults.forEach((res, i) => {
+          const x = startX + (i * (boxSize + boxGap));
+          if (res) {
+            // Emerald Green Box
+            drawRoundedRect(x, boxesY, boxSize, boxSize, 24, '#10b981', null, 0);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('✓', x + (boxSize / 2), boxesY + 66);
+          } else {
+            // Rose Red Box
+            drawRoundedRect(x, boxesY, boxSize, boxSize, 24, '#f43f5e', null, 0);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('✕', x + (boxSize / 2), boxesY + 66);
+          }
         });
 
-        // Bottom QR Section for Scan-to-Play
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '800 38px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText('SCAN TO PLAY ON YOUR PHONE', 540, 1340);
+        // 6. INNER CHALLENGE CONTAINER (Matches Screenshot 1 with QR placed inside)
+        const innerY = 900;
+        const innerH = 740;
+        drawRoundedRect(140, innerY, 800, innerH, 36, 'rgba(8, 20, 39, 0.95)', '#1e3a5f', 3);
 
-        ctx.fillStyle = '#64748b';
-        ctx.font = '600 28px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText('vaseem241.github.io/promptguess', 540, 1400);
+        // Remark: Can you beat my score?
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText('Can you beat my score?', 540, innerY + 75);
+
+        // Embedded QR Code Container & Image
+        const qrBoxSize = 250;
+        const qrY = innerY + 120;
+        drawRoundedRect(540 - (qrBoxSize / 2), qrY, qrBoxSize, qrBoxSize, 28, '#ffffff', null, 0);
 
         if (qrImg && qrImg.src) {
           const qrCanvasImg = new Image();
           qrCanvasImg.onload = () => {
-            // White rounded container behind QR
+            ctx.drawImage(qrCanvasImg, 540 - 110, qrY + 15, 220, 220);
+
+            // "SCAN TO PLAY ON YOUR PHONE"
             ctx.fillStyle = '#ffffff';
-            ctx.roundRect(420, 1460, 240, 240, 24);
-            ctx.fill();
-            ctx.drawImage(qrCanvasImg, 450, 1490, 180, 180);
-            
-            // Download as image file
+            ctx.font = '800 32px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('SCAN TO PLAY ON YOUR PHONE', 540, qrY + qrBoxSize + 60);
+
+            // "PLAY FREE AT:"
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '800 24px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('PLAY FREE AT:', 540, qrY + qrBoxSize + 110);
+
+            // "vaseem241.github.io/promptguess"
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '800 36px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('vaseem241.github.io/promptguess', 540, qrY + qrBoxSize + 160);
+
+            // 7. Bottom Outer Footer Remark
+            ctx.fillStyle = '#64748b';
+            ctx.font = '600 26px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('Take the daily test  •  Test your visual perception', 540, 1780);
+
+            // Trigger Download
             const link = document.createElement('a');
             link.download = `PromptGuess-Score-${correct}-of-5.png`;
             link.href = canvas.toDataURL('image/png');
@@ -793,7 +814,7 @@
       }, 150);
     }
 
-    // --- 9. INITIALIZATION ---
+    // --- 10. INITIALIZATION ---
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       const stats = getStoredData();
