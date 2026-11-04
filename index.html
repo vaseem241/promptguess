@@ -20,7 +20,7 @@
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- QRCode.js for generating the high-res QR code -->
+  <!-- QRCode.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
@@ -665,7 +665,7 @@
       });
     }
 
-    // --- 9. EXACT SCREENSHOT 1 STORY CARD GENERATOR (WITH INTEGRATED QR) ---
+    // --- 9. STORY CARD GENERATOR ---
     function generateStoryCard() {
       const correct = roundResults.filter(Boolean).length;
       const gameUrl = "https://vaseem241.github.io/promptguess/";
@@ -689,7 +689,7 @@
         const canvas = document.getElementById('storyCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Dark Canvas Background with subtle radial glow (Matches Screenshot 1)
+        // Dark Canvas Background with subtle radial glow
         const bgGrad = ctx.createRadialGradient(540, 960, 100, 540, 960, 950);
         bgGrad.addColorStop(0, '#0a1628');
         bgGrad.addColorStop(0.5, '#070f1e');
@@ -697,7 +697,6 @@
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, 1080, 1920);
 
-        // Helper function for rounded rectangles
         function drawRoundedRect(x, y, w, h, r, fill, stroke, strokeWidth) {
           ctx.beginPath();
           ctx.roundRect(x, y, w, h, r);
@@ -712,27 +711,26 @@
           }
         }
 
-        // OUTER CARD (Frosted dark blue glass with rounded corners)
+        // OUTER CARD
         drawRoundedRect(90, 220, 900, 1480, 56, 'rgba(11, 23, 44, 0.88)', '#1e293b', 3);
 
-        // 1. Header: PROMPTGUESS • DAILY AI BENCHMARK
+        // 1. Header: PROMPTGUESS ONLY (Removed "DAILY AI BENCHMARK")
         ctx.textAlign = 'center';
         ctx.fillStyle = '#22d3ee';
-        ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
-        ctx.letterSpacing = '2px';
-        ctx.fillText('PROMPTGUESS  •  DAILY AI BENCHMARK', 540, 320);
+        ctx.font = '800 32px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText('PROMPTGUESS', 540, 320);
 
         // 2. Subtitle: Real or AI?
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 68px "Plus Jakarta Sans", sans-serif';
         ctx.fillText('Real or AI?', 540, 420);
 
-        // 3. Huge Score: 3 / 5 (in emerald green)
+        // 3. Huge Score: 5 / 5 (in emerald green)
         ctx.fillStyle = '#10b981';
         ctx.font = '900 148px "Plus Jakarta Sans", sans-serif';
         ctx.fillText(`${correct}  /  5`, 540, 580);
 
-        // 4. Rank Pill: [🔍 TURING DETECTIVE]
+        // 4. Rank Pill
         ctx.font = '800 30px "Plus Jakarta Sans", sans-serif';
         const rankText = `🔍 ${rankTitle.toUpperCase()}`;
         const rankWidth = ctx.measureText(rankText).width + 60;
@@ -740,7 +738,7 @@
         ctx.fillStyle = '#22d3ee';
         ctx.fillText(rankText, 540, 678);
 
-        // 5. 5 Score Result Squares (Matches Screenshot 1 icons)
+        // 5. 5 Score Result Squares
         const boxSize = 96;
         const boxGap = 26;
         const startX = 540 - ((boxSize * 5 + boxGap * 4) / 2);
@@ -749,13 +747,11 @@
         roundResults.forEach((res, i) => {
           const x = startX + (i * (boxSize + boxGap));
           if (res) {
-            // Emerald Green Box
             drawRoundedRect(x, boxesY, boxSize, boxSize, 24, '#10b981', null, 0);
             ctx.fillStyle = '#ffffff';
             ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('✓', x + (boxSize / 2), boxesY + 66);
           } else {
-            // Rose Red Box
             drawRoundedRect(x, boxesY, boxSize, boxSize, 24, '#f43f5e', null, 0);
             ctx.fillStyle = '#ffffff';
             ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
@@ -763,17 +759,15 @@
           }
         });
 
-        // 6. INNER CHALLENGE CONTAINER (Matches Screenshot 1 with QR placed inside)
+        // 6. INNER CHALLENGE CONTAINER (With Embedded QR)
         const innerY = 900;
         const innerH = 740;
         drawRoundedRect(140, innerY, 800, innerH, 36, 'rgba(8, 20, 39, 0.95)', '#1e3a5f', 3);
 
-        // Remark: Can you beat my score?
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 48px "Plus Jakarta Sans", sans-serif';
         ctx.fillText('Can you beat my score?', 540, innerY + 75);
 
-        // Embedded QR Code Container & Image
         const qrBoxSize = 250;
         const qrY = innerY + 120;
         drawRoundedRect(540 - (qrBoxSize / 2), qrY, qrBoxSize, qrBoxSize, 28, '#ffffff', null, 0);
@@ -783,22 +777,19 @@
           qrCanvasImg.onload = () => {
             ctx.drawImage(qrCanvasImg, 540 - 110, qrY + 15, 220, 220);
 
-            // "SCAN TO PLAY ON YOUR PHONE"
             ctx.fillStyle = '#ffffff';
             ctx.font = '800 32px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('SCAN TO PLAY ON YOUR PHONE', 540, qrY + qrBoxSize + 60);
 
-            // "PLAY FREE AT:"
             ctx.fillStyle = '#38bdf8';
             ctx.font = '800 24px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('PLAY FREE AT:', 540, qrY + qrBoxSize + 110);
 
-            // "vaseem241.github.io/promptguess"
             ctx.fillStyle = '#ffffff';
             ctx.font = '800 36px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('vaseem241.github.io/promptguess', 540, qrY + qrBoxSize + 160);
 
-            // 7. Bottom Outer Footer Remark
+            // Bottom Footer Remark
             ctx.fillStyle = '#64748b';
             ctx.font = '600 26px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('Take the daily test  •  Test your visual perception', 540, 1780);
